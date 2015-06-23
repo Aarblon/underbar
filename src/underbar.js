@@ -79,16 +79,51 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var passed = [];
+
+    _.each(collection, function(x) {
+      if(test(x)) {
+        passed.push(x);
+      }
+    })
+
+    return passed;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+    var rejected = [];
+
+    _.each(collection, function(x) {
+      if(!test(x)) {
+        rejected.push(x);
+      }
+    })
+
+    return rejected;
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var cleanArray = [];
+    var sorted = array.sort();
+    var result = false;
+    
+    for(var i = 0; i < array.length; i ++) {
+      _.each(cleanArray, function(x) {
+        if(x === sorted[i]) {
+          result = true;
+        }
+      })
+      if(result === false) {
+        cleanArray.push(sorted[i]);
+      }
+      result = false;
+    };
+
+    return cleanArray;
   };
 
 
@@ -97,6 +132,13 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var results = [];
+    
+    _.each(collection, function(x) {
+      results.push(iterator(x));
+    });
+
+    return results;
   };
 
   /*
@@ -138,6 +180,19 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if(accumulator === undefined) {
+      accumulator = collection.shift();
+
+       _.each(collection, function(x) {
+      accumulator = iterator(accumulator, x);
+      })
+    } else {  
+      _.each(collection, function(x) {
+      accumulator = iterator(accumulator, x);
+      })
+    }
+    return accumulator;
+    
   };
 
   // Determine if the array or object contains a given value (using `===`).
