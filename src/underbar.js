@@ -94,14 +94,13 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    var rejected = [];
-
-    _.each(collection, function(x) {
+    var rejected = _.filter(collection, function(x) {
       if(!test(x)) {
-        rejected.push(x);
+        return x;
       }
     })
 
+    
     return rejected;
   };
 
@@ -413,6 +412,8 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    return collection.apply(functionOrKey, args);
+    
   };
 
   // Sort the object's values by a criterion produced by an iterator.
