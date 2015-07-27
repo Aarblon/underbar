@@ -429,6 +429,7 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -436,16 +437,76 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    var test = function(element) {
+      if(!Array.isArray(element)) {
+        result.push(element);
+      } else {
+        for(var j = 0; j < element.length; j ++) {
+          test(element[j]);
+        }
+      }
+    };
+
+    var result = [];
+    test(nestedArray);
+    return result;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var arrays = [];
+    
+    for(var i = 0; i < arguments.length; i ++) {
+      arrays.push(arguments[i]);
+    };
+
+    var result = [];
+    var items = _.flatten(arrays);
+    var uniqitems = _.uniq(items);
+    var contains = true; 
+    
+    for(var h = 0; h < uniqitems.length; h ++) {
+      for(var j = 0; j < arrays.length; j ++) {
+        if(!_.contains(arrays[j], uniqitems[h])) {
+          contains = false;
+        }
+      }
+      if(contains) {
+        result.push(uniqitems[h]);
+      }
+      contains = true;
+    }
+
+    return _.uniq(result);
+        
+
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var testArrays = [];
+    for(var i = 1; i < arguments.length; i ++) {
+      testArrays.push(arguments[i]);
+    }
+    var result = [];
+    var different = true;
+
+    for(var j = 0; j < array.length; j ++) {
+      for(var k = 0; k < testArrays.length; k ++) {
+        if(_.contains(testArrays[k], array[j])) {
+          different = false;
+        }
+      }
+      if(different) {
+        result.push(array[j]);
+      }
+      different = true;
+    }
+    
+    return result;
+
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
